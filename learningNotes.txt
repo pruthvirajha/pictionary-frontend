@@ -1,3 +1,4 @@
 1. Learnt robots.txt file significance.
 2. Difference between `export default` and `export`.
 3. Learnt about manifest.json's role in web apps.
+4. Service Worker - https://developers.google.com/web/fundamentals/primers/service-workers/
