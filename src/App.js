@@ -11,7 +11,7 @@ class App extends Component {
         height: 400,
         brushRadius: 10,
         lazyRadius: 12
-      };
+    };
 
     constructor(props, context) {
         super(props, context);
@@ -22,7 +22,15 @@ class App extends Component {
         return (
             <div className="App">
                 <header className="App-header">
-                    <CanvasDraw  canvasHeight={this.state.height}  hideInterface hideGrid />
+                    <CanvasDraw canvasHeight={this.state.height}
+                        onChange={
+                            (canvasDrawRef) => {
+                                console.log("OnChange called... ");
+                                let canvasData = canvasDrawRef.getSaveData();
+                                console.log("Canvas data: " + canvasData);
+                            }
+                        }
+                        hideInterface hideGrid />
                 </header>
             </div>
         );
