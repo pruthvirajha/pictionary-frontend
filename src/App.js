@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import CanvasDraw from "react-canvas-draw";
-import { connectToSocket } from './socket-client.js';
+import { connectToSocket, emitMouseCoordinates } from './socket-client.js';
 
 class App extends Component {
     state = {
@@ -27,7 +27,9 @@ class App extends Component {
                             (canvasDrawRef) => {
                                 console.log("OnChange called... ");
                                 let canvasData = canvasDrawRef.getSaveData();
+                                emitMouseCoordinates(canvasData);
                                 console.log("Canvas data: " + canvasData);
+
                             }
                         }
                         hideInterface hideGrid />
