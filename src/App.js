@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import CanvasDraw from "react-canvas-draw";
 import { connectToSocket, emitMouseCoordinates } from './socket-client.js';
@@ -28,8 +27,7 @@ class App extends Component {
                                 console.log("OnChange called... ");
                                 let canvasData = canvasDrawRef.getSaveData();
                                 emitMouseCoordinates(canvasData);
-                                console.log("Canvas data: " + canvasData);
-
+                                console.log(`Canvas data --> ${canvasData}`);
                             }
                         }
                         hideInterface hideGrid />

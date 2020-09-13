@@ -1,20 +1,19 @@
 import io from 'socket.io-client';
-import { reconnectionConfig } from './socketConfig'
+import { reconnectionConfig, SOCKET_EVENT } from './socketConfig';
 
 var socket;
 
 function connectToSocket() {
     console.log(`Connecting to SOCKET_URL --> ${process.env.REACT_APP_SOCKET_URL}`);
-    const socket = io(process.env.REACT_APP_SOCKET_URL, reconnectionConfig);
+    socket = io(process.env.REACT_APP_SOCKET_URL, reconnectionConfig);
     socket.on('connect', () => {
         console.log(`Socket connected - OK`);
     });
 }
 
 function emitMouseCoordinates(payload) {
-
-    debugger;
-    socket.emit('chat_message', payload);
+    console.log(`Mouse Coordinate Payload: ${payload}`);
+    socket.emit(SOCKET_EVENT.SEND_COORDINATES, payload);
 }
 
 export { connectToSocket, emitMouseCoordinates }
