@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import CanvasDraw from "react-canvas-draw";
-import { connectToSocket, emitMouseCoordinates } from './socket-client.js';
+import { connectToSocket, emitMouseCoordinates, subscribeToReceiveCoordinates } from './socket-client.js';
 
 class App extends Component {
     state = {
@@ -17,11 +17,22 @@ class App extends Component {
         connectToSocket();
     }
 
+    componentDidMount() {
+        subscribeToReceiveCoordinates('receive_coordinates', this.receivedCoordinatesHandler);
+    }
+
+    receivedCoordinatesHandler(data) {
+        console.log(`Data received from server: ${data}`);
+        console.log(`${this.receivedCoordinatesHandler.name} Called...`);
+        this.canvas.loadSaveData(data);
+    }
+
     render() {
         return (
             <div className="App">
                 <header className="App-header">
                     <CanvasDraw canvasHeight={this.state.height}
+                        ref={(ref) => this.canvas = ref}
                         onChange={
                             (canvasDrawRef) => {
                                 console.log("OnChange called... ");

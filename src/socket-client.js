@@ -11,9 +11,13 @@ function connectToSocket() {
     });
 }
 
+function subscribeToReceiveCoordinates(eventName, eventHandler){
+    socket.on(eventName,eventHandler);
+}
+
 function emitMouseCoordinates(payload) {
     console.log(`Mouse Coordinate Payload: ${payload}`);
     socket.emit(SOCKET_EVENT.SEND_COORDINATES, payload);
 }
 
-export { connectToSocket, emitMouseCoordinates }
+export { connectToSocket, emitMouseCoordinates, subscribeToReceiveCoordinates }
