@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import io from 'socket.io-client';
+import { reconnectionConfig, SOCKET_EVENT } from './socketConfig';
 import './App.css';
 import CanvasDraw from "react-canvas-draw";
 import { connectToSocket, emitMouseCoordinates, subscribeToReceiveCoordinates } from './socket-client.js';
@@ -9,25 +11,37 @@ class App extends Component {
         width: 400,
         height: 400,
         brushRadius: 10,
-        lazyRadius: 12
+        lazyRadius: 12,
+        receivedMouseCoordinates: ""
     };
 
     constructor(props, context) {
         super(props, context);
-        connectToSocket();
+        this.canvas = React.createRef();
     }
 
     componentDidMount() {
-        subscribeToReceiveCoordinates('receive_coordinates', this.receivedCoordinatesHandler);
-    }
+        console.log(`Connecting to SOCKET_URL --> ${process.env.REACT_APP_SOCKET_URL}`);
+        const socket = io(process.env.REACT_APP_SOCKET_URL, reconnectionConfig);
+        socket.on('connect', () => {
+            console.log(`Socket connected - OK`);
+        });
 
-    receivedCoordinatesHandler(data) {
-        console.log(`Data received from server: ${data}`);
-        console.log(`${this.receivedCoordinatesHandler.name} Called...`);
-        this.canvas.loadSaveData(data);
+        socket.on(SOCKET_EVENT.RECEIVE_COORDINATES, data => {
+            console.log(`Socket Mouse Coordinates Received Data --> ${data}`);
+            debugger;
+            this.setState({
+                ...this.state,
+                receivedMouseCoordinates: data
+            });
+        });
     }
 
     render() {
+        const { receivedMouseCoordinates } = this.state;
+        if (this.canvas.current) {
+            this.canvas.current.loadSaveData(receivedMouseCoordinates);
+        }
         return (
             <div className="App">
                 <header className="App-header">
